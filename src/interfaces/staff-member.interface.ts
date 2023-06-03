@@ -1,0 +1,63 @@
+export interface IStaffMember {
+  staffId: string;
+  employeeName: string;
+  fatherName: string;
+  month: string;
+  age: string;
+  joiningDate: string;
+  hasID: boolean;
+  verification: string;
+  contract: string;
+  role: string;
+  department: string;
+  costCentre: string;
+  retainerEmpNo: string;
+  retainerContactNumber: string;
+  perVisitCharges: number;
+  teleServiceCharges: number;
+  retainerShipFeeStandard12Hours: number;
+  retainerShipFeeAdvanced24Hours: number;
+  availableOnDuty: string;
+  covidDuty24Hours: string;
+  location: string;
+  relevantExperienceInnYears: number;
+  nursingCouncilRegistrationNumber: string;
+  ncrExpiryDate: string;
+  letterStartDate: string;
+  letterEndDate: string;
+  serviceableZipCodes: string[];
+  emergencyContactNumber: string;
+  addressAsOnAadhaar: string;
+  nameAsPerBank: string;
+  panNo: string;
+  bankName: string;
+  bankAccountNumber: string;
+  ifscCode: string;
+  aadhaarNumber: string;
+  highestEducation: string;
+  signatory: string;
+  remarks?: string;
+  language: string;
+  emailId: string;
+  profilePicture?: string;
+  profilePictureBase64?: string;
+  dob: string;
+  gender: string;
+  mobileNumber: string;
+  currentAddress: string;
+  avgRating: number;
+  totalRatings: number;
+  bookingInvitationList: IBookingDetail[];
+  documents: { [key: string]: { url: string; base64: string } };
+  isLeadSendingEnabled: boolean;
+}
+
+interface IBookingDetail {
+  bookingId: string;
+  bookingInvitationStatus: string;
+  createdAt: number;
+  createdAtStr: string;
+  serviceName: string;
+  updatedAt: number;
+  updatedAtStr: string;
+}

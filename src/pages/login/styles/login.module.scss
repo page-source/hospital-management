@@ -1,0 +1,78 @@
+@import "../../../styles/variables";
+
+.wrapper {
+  background-color: rgba($base-color, 0.5);
+  height: 100vh;
+  overflow: auto;
+  color: white;
+  display: flex;
+  position: relative;
+
+  .logo-wrapper {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .logo-title {
+      margin-top: 5px;
+      text-align: center;
+      font-size: 18px;
+      color: $base-color;
+    }
+  }
+
+  .inner-wrapper {
+    margin: auto;
+    padding: 100px 0;
+
+    .title {
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 4px;
+      width: 500px;
+      padding: 15px;
+      color: rgba(0, 0, 0, 0.7);
+      text-align: unset;
+
+      @media (max-width: 768px) {
+        min-width: 300px;
+        max-width: 500px;
+        width: calc(100vw - 50px);
+      }
+
+      .form-container {
+        .title {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 21px;
+          color: $base-color;
+        }
+
+        :global {
+          .ant-form-item-label label {
+            color: rgba(0, 0, 0, 0.4);
+            height: auto;
+          }
+        }
+
+        .form-submit-btn {
+          width: 100%;
+          height: 38px;
+        }
+      }
+    }
+  }
+}

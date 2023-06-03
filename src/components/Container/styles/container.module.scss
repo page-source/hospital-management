@@ -1,0 +1,129 @@
+@import "../../../styles/variables";
+
+.left-section {
+  width: 210px;
+  min-width: 210px;
+  transition: all 0.5s;
+  overflow: hidden;
+  border-bottom: 1px solid #d1d5db;
+
+  .logo-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0.25rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+
+    .logo-img {
+      position: relative;
+      line-height: 0;
+      transition: all ease-in-out 0.2s;
+      left: -40px;
+    }
+
+    .logo-title {
+      font-size: 22px;
+      margin: auto 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-15px, -50%);
+      color: $base-color;
+    }
+  }
+
+  .menu-wrapper {
+    width: 100%;
+  }
+
+  .logout-wrapper {
+    display: flex;
+    gap: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-top: 1px solid rgb(213 214 219);
+    background-color: rgb(245 246 252);
+
+    img {
+      min-width: 20px;
+    }
+  }
+
+  .logged-in-wrapper {
+    border-top: 1px solid rgb(213 214 219);
+    font-size: 14px;
+    padding: 4px 8px;
+    white-space: nowrap;
+
+    .logged-in-title {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .logged-in-val > p {
+      font-size: 12px;
+      margin-bottom: 0px;
+    }
+  }
+
+  .menu-item {
+    gap: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative;
+
+    img {
+      min-width: 20px;
+    }
+
+    .menu-items-title {
+      line-height: 1;
+      width: fit-content;
+      white-space: nowrap;
+    }
+
+    &.menu-items-active::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: $base-color;
+    }
+  }
+}
+
+.right-section {
+  width: calc(100vw - 210px);
+  transition: all 0.5s;
+}
+
+.collapsed-section {
+  .left-section {
+    width: 56px;
+    min-width: 56px;
+
+    .logo-wrapper {
+      .logo-img {
+        left: 0;
+      }
+
+      .logo-title {
+        display: none;
+      }
+    }
+
+    .menu-items-title {
+      width: 0;
+    }
+
+    .logged-in-wrapper {
+      display: none;
+    }
+  }
+
+  .right-section {
+    width: calc(100vw - 56px);
+  }
+}
