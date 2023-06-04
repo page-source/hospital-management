@@ -1,0 +1,33 @@
+@import "../../../../styles/variables";
+
+.main-title {
+  padding: 2px 0 2px 5px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-left: 2px solid $base-color;
+}
+
+.field-title {
+  width: 150px;
+  min-width: 150px;
+  margin-bottom: 5px;
+}
+
+.field-value {
+  width: calc(100% - 150px);
+}
+
+.table-wrapper {
+  table,
+  tr,
+  td,
+  th {
+    border: 1px solid rgba(0, 0, 0, 0.7);
+  }
+
+  th,
+  td {
+    padding: 2px 8px;
+  }
+}

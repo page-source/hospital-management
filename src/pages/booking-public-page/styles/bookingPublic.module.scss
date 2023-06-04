@@ -1,0 +1,29 @@
+@import "../../../styles/variables";
+
+.main-title {
+  padding: 2px 0 2px 5px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-left: 2px solid $base-color;
+}
+
+.field-item {
+  display: flex;
+  padding-bottom: 0.5rem;
+
+  .field-title {
+    font-weight: 500;
+    width: 190px;
+    min-width: 190px;
+    color: #7f7f7f;
+  }
+
+  @media screen and (max-width: 560px) {
+    display: block;
+
+    .field-title {
+      width: 100%;
+    }
+  }
+}
