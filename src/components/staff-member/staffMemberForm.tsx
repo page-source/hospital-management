@@ -11,6 +11,7 @@ import {
   message,
   Row,
   Select,
+  Checkbox,
   Spin,
   Switch,
   Upload,
@@ -33,6 +34,7 @@ const StaffMemberForm = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadFieldKey, setUploadFieldKey] = useState(getRandomString());
   const [loading, setLoading] = useState(false);
+  const [serviceTypes, setServiceableTypes] = useState<any>([]);
   const [details, setDetails] = useState<IStaffMember>();
 
   const creatingNew = router.query.id === "new";
@@ -67,10 +69,10 @@ const StaffMemberForm = () => {
             }
             obj.documents = docArr;
 
-            obj.dob = obj.dob ? moment(obj.dob, "YYYY-MM-DD") : undefined;
+            obj.dob = obj.dob ? moment(obj.dob, "DD-MMM-YYYY") : undefined;
             obj.month = obj.month ? moment(obj.month, "MMM") : undefined;
             obj.joiningDate = obj.joiningDate
-              ? moment(obj.joiningDate, "YYYY-MM-DD")
+              ? moment(obj.joiningDate, "DD-MMM-YYYY")
               : undefined;
             obj.ncrExpiryDate = obj.ncrExpiryDate
               ? moment(obj.ncrExpiryDate, "YYYY-MM-DD")
@@ -103,11 +105,25 @@ const StaffMemberForm = () => {
       });
   };
 
+  const loadServiceableServiceTypes = () => {
+    api
+      .get("/pht/v1/api/staff/action/list-service-types")
+      .then((r) => {
+        const serviceArr = Object.values(r.data?.data);
+        setServiceableTypes(serviceArr || []);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     if (!creatingNew && router.query.id) {
       loadDetails();
     }
   }, [router.query.id]);
+
+  useEffect(() => {
+    loadServiceableServiceTypes();
+  }, []);
 
   useEffect(() => {
     if (profilePictureValue && typeof profilePictureValue !== "string") {
@@ -711,7 +727,7 @@ const StaffMemberForm = () => {
                 </Form.Item>
               </Col>
 
-              <Col sm={24} md={16}>
+              <Col sm={24} md={8}>
                 <Form.Item
                   label="Servicable Zipcodes"
                   name="serviceableZipCodes"
@@ -728,6 +744,27 @@ const StaffMemberForm = () => {
                     placeholder="Type zipcodes"
                     popupClassName="d-none"
                   />
+                </Form.Item>
+              </Col>
+
+              <Col sm={24} md={8}>
+                <Form.Item
+                  label="Serviceable Servicessss"
+                  name="serviceableServices"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please type serviceable services!",
+                    },
+                  ]}
+                >
+                  <Checkbox.Group>
+                    {serviceTypes.map((option: any) => (
+                      <Checkbox key={option} value={option}>
+                        {option}
+                      </Checkbox>
+                    ))}
+                  </Checkbox.Group>
                 </Form.Item>
               </Col>
             </Row>

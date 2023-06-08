@@ -79,6 +79,11 @@ const CustomerDetails = () => {
           </div>
 
           <div className="flex pb-2">
+            <div className={styles["field-title"]}>Status :</div>
+            <div>{details?.status || "--"}</div>
+          </div>
+
+          <div className="flex pb-2">
             <div className={styles["field-title"]}>Date of Birth :</div>
             <div>{details?.dob || "--"}</div>
           </div>
