@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Dropdown,
@@ -10,24 +10,24 @@ import {
   Switch,
   Table,
   Tooltip,
-} from 'antd';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { CloseCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { ColumnsType } from 'antd/lib/table';
-import moment from 'moment';
+} from "antd";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { CloseCircleOutlined, ReloadOutlined } from "@ant-design/icons";
+import { ColumnsType } from "antd/lib/table";
+import moment from "moment";
 
-import { IBooking, IBookingPayment } from 'interfaces/booking.interface';
-import { IStaffMember } from 'interfaces/staff-member.interface';
-import { IPagination } from 'interfaces/common.interface';
-import api from 'components/axios';
-import Container from 'components/Container';
-import MenuIcon from 'assets/menu.svg';
+import { IBooking, IBookingPayment } from "interfaces/booking.interface";
+import { IStaffMember } from "interfaces/staff-member.interface";
+import { IPagination } from "interfaces/common.interface";
+import api from "components/axios";
+import Container from "components/Container";
+import MenuIcon from "assets/menu.svg";
 
-import styles from './styles/booking.module.scss';
+import styles from "./styles/booking.module.scss";
 
 interface IStatusChangeState {
-  type: 'cancelled' | 'completed';
+  type: "cancelled" | "completed";
   id: string;
   loading: boolean;
 }
@@ -40,7 +40,7 @@ interface IDetailSectionProps {
 const getRandomString = () => Math.random().toString();
 
 const BookingsPage = () => {
-  const [typeFilter, setTypeFilter] = useState('ALL');
+  const [typeFilter, setTypeFilter] = useState("ALL");
   let refreshInterval: NodeJS.Timeout;
   const [form] = Form.useForm();
   const router = useRouter();
@@ -54,7 +54,7 @@ const BookingsPage = () => {
   const [selectedBooking, setSelectedBooking] = useState<IBooking>();
   const [isAutoRefreshOn, setIsAutoRefreshOn] = useState(true);
   const [assigningBooking, setAssigningBooking] = useState({
-    id: '',
+    id: "",
     loading: false,
   });
   const [pagination, setPagination] = useState<IPagination>({
@@ -65,7 +65,7 @@ const BookingsPage = () => {
 
   useEffect(() => {
     api
-      .get('/pht/v1/api/staff')
+      .get("/pht/v1/api/staff")
       .then((r) => setStaffMembers(r.data?.data?.staffList || []))
       .catch(console.log);
   }, []);
@@ -73,11 +73,11 @@ const BookingsPage = () => {
   useEffect(() => {
     if (selectedBooking && !selectedBooking.isRead) {
       api
-        .get('/pht/v1/api/bookings/action/mark-read', {
+        .get("/pht/v1/api/bookings/action/mark-read", {
           params: { booking_id: selectedBooking.bookingId },
         })
         .then((r) => {
-          if (r.data?.status === 'SUCCESS') {
+          if (r.data?.status === "SUCCESS") {
             const tempArr = [...bookingsList];
             const index = tempArr.findIndex(
               (el) => el.bookingId === selectedBooking.bookingId
@@ -160,22 +160,22 @@ const BookingsPage = () => {
     setChangingStatus({
       id: bookingId,
       loading: true,
-      type: 'completed',
+      type: "completed",
     });
     api
       .get(`/pht/v1/api/bookings/action/mark-complete?booking_id=${bookingId}`)
       .then((r) => {
-        if (r.data?.status !== 'FAILURE') {
+        if (r.data?.status !== "FAILURE") {
           getBookings();
           message.success({
-            content: 'Marked as Completed successfully!',
-            key: 'bookings',
+            content: "Marked as Completed successfully!",
+            key: "bookings",
             duration: 4,
           });
         } else {
           message.error({
-            content: r.data.data || 'Failed in marking as completed!',
-            key: 'bookings',
+            content: r.data.data || "Failed in marking as completed!",
+            key: "bookings",
             duration: 4,
           });
         }
@@ -188,22 +188,22 @@ const BookingsPage = () => {
     setChangingStatus({
       id: bookingId,
       loading: true,
-      type: 'cancelled',
+      type: "cancelled",
     });
     api
       .get(`/pht/v1/api/bookings/action/mark-cancel?booking_id=${bookingId}`)
       .then((r) => {
         getBookings();
-        if (r.data?.status !== 'FAILURE') {
+        if (r.data?.status !== "FAILURE") {
           message.success({
-            content: 'Marked as cancelled successfully!',
-            key: 'bookings',
+            content: "Marked as cancelled successfully!",
+            key: "bookings",
             duration: 4,
           });
         } else {
           message.error({
-            content: r.data.data || 'Failed in marking as cancelled!',
-            key: 'bookings',
+            content: r.data.data || "Failed in marking as cancelled!",
+            key: "bookings",
             duration: 4,
           });
         }
@@ -220,20 +220,20 @@ const BookingsPage = () => {
         staffId: values.staffId,
       })
       .then((r) => {
-        if (r.data?.status !== 'FAILURE') {
+        if (r.data?.status !== "FAILURE") {
           getBookings();
           message.success({
-            content: 'Booking assigned successfully!',
-            key: 'bookings',
+            content: "Booking assigned successfully!",
+            key: "bookings",
             duration: 4,
           });
           form.resetFields();
-          setAssigningBooking({ id: '', loading: false });
+          setAssigningBooking({ id: "", loading: false });
         } else {
           setAssigningBooking((prev) => ({ ...prev, loading: false }));
           message.error({
-            content: r.data.data || 'Failed in assigning booking!',
-            key: 'bookings',
+            content: r.data.data || "Failed in assigning booking!",
+            key: "bookings",
             duration: 4,
           });
         }
@@ -243,106 +243,106 @@ const BookingsPage = () => {
 
   const columns: ColumnsType<IBooking> = [
     {
-      title: 'Customer Name',
-      dataIndex: 'customerName',
+      title: "Customer Name",
+      dataIndex: "customerName",
       width: 200,
       render: (val: string, record: IBooking) =>
         val ? (
           <>
             {val}
-            <div style={{ wordBreak: 'break-all' }}>
+            <div style={{ wordBreak: "break-all" }}>
               ({record.customerEmailId})
             </div>
           </>
         ) : (
-          '--'
+          "--"
         ),
     },
     {
-      title: 'Patient',
-      dataIndex: 'bookingForMember',
+      title: "Patient",
+      dataIndex: "bookingForMember",
       width: 175,
       render: (val, record: IBooking) =>
         val ? (
           <>
             {record.bookingForMember ? (
               <>
-                {record.bookingForMember.firstName || ''}{' '}
-                {record.bookingForMember.lastName || ''}
-                <div style={{ wordBreak: 'break-all' }}>
+                {record.bookingForMember.firstName || ""}{" "}
+                {record.bookingForMember.lastName || ""}
+                <div style={{ wordBreak: "break-all" }}>
                   ({record.bookingForMember.relation})
                 </div>
               </>
             ) : (
-              '--'
+              "--"
             )}
           </>
         ) : (
-          '--'
+          "--"
         ),
     },
     {
-      title: 'Service Name',
-      dataIndex: 'serviceName',
+      title: "Service Name",
+      dataIndex: "serviceName",
       width: 125,
-      render: (val: string) => val || '--',
+      render: (val: string) => val || "--",
     },
     {
-      title: 'Booking ID',
-      dataIndex: 'bookingId',
+      title: "Booking ID",
+      dataIndex: "bookingId",
       width: 150,
-      render: (val: string) => <span>{val}</span> || '--',
+      render: (val: string) => <span>{val}</span> || "--",
     },
     {
-      title: 'FieldEZ Id',
-      dataIndex: 'fieldEZTicketNumber',
+      title: "FieldEZ Id",
+      dataIndex: "fieldEZTicketNumber",
       width: 100,
-      render: (val: string) => val || '--',
+      render: (val: string) => val || "--",
     },
     {
-      title: 'Staff Member Name',
-      dataIndex: 'bookingAssigneeDetails',
+      title: "Staff Member Name",
+      dataIndex: "bookingAssigneeDetails",
       width: 210,
       render: (data) =>
         data ? (
           <>
             {data.name}
-            <div style={{ wordBreak: 'break-all' }}>
-              ({data.emailId || '--'})
+            <div style={{ wordBreak: "break-all" }}>
+              ({data.emailId || "--"})
             </div>
           </>
         ) : (
-          '--'
+          "--"
         ),
     },
     {
-      title: 'Amount',
-      key: 'payment_amount',
+      title: "Amount",
+      key: "payment_amount",
       width: 90,
-      dataIndex: 'payment',
+      dataIndex: "payment",
       render: (data: IBookingPayment) =>
-        data?.amount || data?.amount === 0 ? `₹ ${data.amount}` : '--',
+        data?.amount || data?.amount === 0 ? `₹ ${data.amount}` : "--",
     },
     {
-      title: 'Status',
-      dataIndex: 'bookingStatusStr',
+      title: "Status",
+      dataIndex: "bookingStatusStr",
       width: 130,
-      render: (val: string) => val || '--',
+      render: (val: string) => val || "--",
     },
     {
-      title: 'Invitations',
-      dataIndex: 'totalInvitationsSent',
+      title: "Invitations",
+      dataIndex: "totalInvitationsSent",
       width: 200,
       render: (val: number, record: IBooking) => (
         <>
           <div className="flex gap-1">
-            <div className={styles['invitation-col-title']}>
+            <div className={styles["invitation-col-title"]}>
               Total Invitations:
             </div>
             <div>{record.totalInvitationsSent || 0}</div>
           </div>
           <div className="flex gap-1">
-            <div className={styles['invitation-col-title']}>
+            <div className={styles["invitation-col-title"]}>
               Accepted Invitations:
             </div>
             <div>{record.totalInvitationsAccepted || 0}</div>
@@ -351,27 +351,35 @@ const BookingsPage = () => {
       ),
     },
     {
-      title: 'Last updated at',
-      dataIndex: 'updatedAtStr',
+      title: "Last updated at",
+      dataIndex: "updatedAtStr",
       width: 190,
-      render: (val: string) => val || '--',
+      render: (val: string) => val || "--",
     },
     {
-      title: 'Actions',
-      dataIndex: 'actions',
+      title: "Actions",
+      dataIndex: "actions",
       width: 80,
-      fixed: 'right',
+      fixed: "right",
       render: (val: any, record: IBooking) => (
         <Dropdown
           menu={{
             items: [
               {
-                key: 'view-details',
+                key: "edit-details",
+                label: <div id="options-edit-details">Edit Details</div>,
+                onClick: () =>
+                  router.push(
+                    `${router.pathname}/${record.bookingId}?edit=true`
+                  ),
+              },
+              {
+                key: "view-details",
                 label: <div id="options-view-details">View Details</div>,
                 onClick: () => setSelectedBooking(record),
               },
               {
-                key: 'assign',
+                key: "assign",
                 label: (
                   <div id="options-assign-staff-member">
                     Assign Staff Member
@@ -384,21 +392,21 @@ const BookingsPage = () => {
                   }),
               },
               {
-                key: 'complete',
+                key: "complete",
                 label: <div id="options-mark-completed">Mark As Completed</div>,
                 onClick: () =>
                   setChangingStatus({
-                    type: 'completed',
+                    type: "completed",
                     id: record.bookingId,
                     loading: false,
                   }),
               },
               {
-                key: 'cancel',
+                key: "cancel",
                 label: <div id="options-mark-cancelled">Mark As Cancelled</div>,
                 onClick: () =>
                   setChangingStatus({
-                    type: 'cancelled',
+                    type: "cancelled",
                     id: record.bookingId,
                     loading: false,
                   }),
@@ -408,7 +416,7 @@ const BookingsPage = () => {
         >
           <Image
             src={MenuIcon}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
             layout="fixed"
             id="options-wrapper"
           />
@@ -416,11 +424,15 @@ const BookingsPage = () => {
       ),
     },
   ];
-
+  const typeOptions = [
+    { label: "All", value: "ALL" },
+    { label: "New", value: "NEW_BOOKINGS" },
+    { label: "Approved", value: "APPROVED" },
+  ];
   return (
     <Container
       extraContent={
-        <div style={{ marginLeft: 'auto' }}>
+        <div style={{ marginLeft: "auto" }}>
           <label className="mr-2">Auto Refresh?</label>
           <Switch checked={isAutoRefreshOn} onChange={setIsAutoRefreshOn} />
         </div>
@@ -428,26 +440,32 @@ const BookingsPage = () => {
     >
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'end',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "end",
           gap: 15,
           marginBottom: 10,
         }}
+        className={styles["booking-menu"]}
       >
         <div className="flex items-center gap-2">
           <div>Type:</div>
-          <Radio.Group
-            options={[
-              { label: 'All', value: 'ALL' },
-              { label: 'New', value: 'NEW_BOOKINGS' },
-              { label: 'Approved', value: 'APPROVED' },
-            ]}
-            onChange={({ target }) => setTypeFilter(target.value)}
-            value={typeFilter}
-            optionType="button"
-            buttonStyle="solid"
-          />
+          {window.innerWidth > 560 ? (
+            <Radio.Group
+              options={typeOptions}
+              onChange={({ target }) => setTypeFilter(target.value)}
+              value={typeFilter}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          ) : (
+            <Select
+              defaultValue={typeFilter}
+              style={{ width: 100 }}
+              onChange={setTypeFilter}
+              options={typeOptions}
+            />
+          )}
         </div>
 
         <div className="flex gap-3">
@@ -455,7 +473,7 @@ const BookingsPage = () => {
             type="primary"
             onClick={() => router.push(`${router.pathname}/new`)}
           >
-            Add New Booking
+            {window.innerWidth > 560 ? "Add New Booking" : "+ Booking"}
           </Button>
 
           <Tooltip title="Refresh">
@@ -464,20 +482,20 @@ const BookingsPage = () => {
               disabled={isAutoRefreshOn}
               onClick={() => setRefreshTS(getRandomString())}
             >
-              <ReloadOutlined style={{ verticalAlign: 'text-top' }} />
+              <ReloadOutlined style={{ verticalAlign: "text-top" }} />
             </Button>
           </Tooltip>
         </div>
       </div>
 
       <div
-        className={`${styles['list-detail-wrapper']} ${
-          selectedBooking ? styles['list-with-detail'] : ''
+        className={`${styles["list-detail-wrapper"]} ${
+          selectedBooking ? styles["list-with-detail"] : ""
         }`}
       >
         <div
           ref={wrapperRef}
-          className={`bg-white border border-gray-300 ${styles['list-section']}`}
+          className={`bg-white border border-gray-300 ${styles["list-section"]}`}
         >
           <Table
             rowKey={(row) => row.bookingId}
@@ -489,9 +507,9 @@ const BookingsPage = () => {
               y: `calc(100vh - 252px)`,
             }}
             onRow={(record) => ({
-              className: !record.isRead ? 'table-row-unread' : '',
+              className: !record.isRead ? "table-row-unread" : "",
               onClick: (e: any) => {
-                if (!e.target?.id.startsWith('options-')) {
+                if (!e.target?.id.startsWith("options-")) {
                   setSelectedBooking(record);
                 }
               },
@@ -524,7 +542,7 @@ const BookingsPage = () => {
         okButtonProps={{ disabled: assigningBooking.loading }}
         onCancel={() => {
           form.resetFields();
-          setAssigningBooking({ id: '', loading: false });
+          setAssigningBooking({ id: "", loading: false });
         }}
       >
         <Form
@@ -536,7 +554,7 @@ const BookingsPage = () => {
           <Form.Item
             label="Staff Member"
             name="staffId"
-            rules={[{ required: true, message: 'Staff Member is required!' }]}
+            rules={[{ required: true, message: "Staff Member is required!" }]}
           >
             <Select
               showSearch
@@ -555,16 +573,16 @@ const BookingsPage = () => {
         title="Change Status"
         open={!!changingStatus}
         onOk={() => {
-          if (changingStatus?.type === 'cancelled') {
+          if (changingStatus?.type === "cancelled") {
             markAsCancelled(changingStatus.id);
-          } else if (changingStatus?.type === 'completed') {
+          } else if (changingStatus?.type === "completed") {
             markAsCompleted(changingStatus.id);
           }
         }}
         okButtonProps={{ loading: changingStatus?.loading }}
         onCancel={() => setChangingStatus(undefined)}
       >
-        Are you sure to mark this booking ({changingStatus?.id}) as{' '}
+        Are you sure to mark this booking ({changingStatus?.id}) as{" "}
         {changingStatus?.type}?
       </Modal>
     </Container>
@@ -579,10 +597,10 @@ const DetailSection = ({
 
   return (
     <div
-      className={`bg-white border border-gray-300 pt-6 pl-4 pb-4 pr-4 ${styles['detail-section']}`}
+      className={`bg-white border border-gray-300 pt-6 pl-4 pb-4 pr-4 ${styles["detail-section"]}`}
     >
       <div className="flex justify-between">
-        <h2 className={styles['detail-wrapper-title']}>Booking Details</h2>
+        <h2 className={styles["detail-wrapper-title"]}>Booking Details</h2>
 
         <div className="flex gap-4">
           <a
@@ -601,95 +619,95 @@ const DetailSection = ({
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Booking ID :</div>
+        <div className={styles["field-title"]}>Booking ID :</div>
         <div>{selectedBooking?.bookingId}</div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>FieldEZ ID :</div>
-        <div>{selectedBooking?.fieldEZTicketNumber || '--'}</div>
+        <div className={styles["field-title"]}>FieldEZ ID :</div>
+        <div>{selectedBooking?.fieldEZTicketNumber || "--"}</div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Booking Date :</div>
-        <div>{selectedBooking?.createdAtStr || '--'}</div>
+        <div className={styles["field-title"]}>Booking Date :</div>
+        <div>{selectedBooking?.createdAtStr || "--"}</div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Slot Date :</div>
+        <div className={styles["field-title"]}>Slot Date :</div>
         <div>
           {selectedBooking?.slotDate ? (
             <>
-              {moment(selectedBooking.slotDate, 'YYYY-MM-DD').format(
-                'DD MMM, YYYY'
-              )}{' '}
-              {moment(selectedBooking.slotTime, 'HH:mm').format('hh:mm A')}
+              {moment(selectedBooking.slotDate, "YYYY-MM-DD").format(
+                "DD MMM, YYYY"
+              )}{" "}
+              {moment(selectedBooking.slotTime, "HH:mm").format("hh:mm A")}
             </>
           ) : (
-            '--'
+            "--"
           )}
         </div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Customer Name :</div>
+        <div className={styles["field-title"]}>Customer Name :</div>
         <div>
-          {selectedBooking?.customerName || '--'} (
-          {selectedBooking?.customerEmailId || '--'})
+          {selectedBooking?.customerName || "--"} (
+          {selectedBooking?.customerEmailId || "--"})
         </div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Patient :</div>
+        <div className={styles["field-title"]}>Patient :</div>
         <div>
           {selectedBooking?.bookingForMember ? (
             <>
-              {selectedBooking.bookingForMember.firstName || ''}{' '}
-              {selectedBooking.bookingForMember.lastName || ''} (
-              {selectedBooking?.bookingForMember.relation || '--'})
+              {selectedBooking.bookingForMember.firstName || ""}{" "}
+              {selectedBooking.bookingForMember.lastName || ""} (
+              {selectedBooking?.bookingForMember.relation || "--"})
             </>
           ) : (
-            '--'
+            "--"
           )}
         </div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Patient Phone :</div>
-        <div>{selectedBooking?.bookingForMember?.phoneNumber || '--'}</div>
+        <div className={styles["field-title"]}>Patient Phone :</div>
+        <div>{selectedBooking?.bookingForMember?.phoneNumber || "--"}</div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Staff Member :</div>
+        <div className={styles["field-title"]}>Staff Member :</div>
         <div>
           {selectedBooking?.bookingAssigneeDetails ? (
             <>
-              {selectedBooking.bookingAssigneeDetails.name || '--'} (
-              {selectedBooking.bookingAssigneeDetails.emailId || '--'})
+              {selectedBooking.bookingAssigneeDetails.name || "--"} (
+              {selectedBooking.bookingAssigneeDetails.emailId || "--"})
             </>
           ) : (
-            '--'
+            "--"
           )}
         </div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Service Name :</div>
-        <div>{selectedBooking?.serviceName || '--'}</div>
+        <div className={styles["field-title"]}>Service Name :</div>
+        <div>{selectedBooking?.serviceName || "--"}</div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Booking Status :</div>
-        <div>{selectedBooking?.bookingStatusStr || '--'}</div>
+        <div className={styles["field-title"]}>Booking Status :</div>
+        <div>{selectedBooking?.bookingStatusStr || "--"}</div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Invitations Sent :</div>
+        <div className={styles["field-title"]}>Invitations Sent :</div>
         <div>{selectedBooking?.totalInvitationsSent || 0}</div>
       </div>
 
       <div className="flex pb-2">
-        <div className={styles['field-title']}>Invitations Accepted :</div>
+        <div className={styles["field-title"]}>Invitations Accepted :</div>
         <div>{selectedBooking?.totalInvitationsAccepted || 0}</div>
       </div>
     </div>

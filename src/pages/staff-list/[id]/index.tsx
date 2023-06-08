@@ -11,7 +11,7 @@ const StaffMember = () => {
 
   return (
     <Container>
-      <div className="bg-white border border-gray-300 pt-6 pl-4 pb-4 pr-4 relative">
+      <div className="bg-white border border-gray-300 pt-6 pl-4 pb-4 pr-4 relative overflow-auto">
         {router.query.id && (
           <>
             {creatingNew || editing ? (

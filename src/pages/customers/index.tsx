@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { Dropdown, Table, Button } from 'antd';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { ColumnsType } from 'antd/lib/table';
-import moment from 'moment';
+import { useEffect, useRef, useState } from "react";
+import { Dropdown, Table, Button } from "antd";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { ColumnsType } from "antd/lib/table";
+import moment from "moment";
 
-import { ICustomer } from 'interfaces/customer.interface';
-import { IPagination } from 'interfaces/common.interface';
-import api from 'components/axios';
-import Container from 'components/Container';
-import MenuIcon from 'assets/menu.svg';
-import { getAddressString } from 'utils/functions';
+import { ICustomer } from "interfaces/customer.interface";
+import { IPagination } from "interfaces/common.interface";
+import api from "components/axios";
+import Container from "components/Container";
+import MenuIcon from "assets/menu.svg";
+import { getAddressString } from "utils/functions";
 
 const CustomerssPage = () => {
   const router = useRouter();
@@ -50,68 +50,74 @@ const CustomerssPage = () => {
 
   const columns: ColumnsType<ICustomer> = [
     {
-      title: 'Name',
-      dataIndex: 'firstName',
+      title: "Name",
+      dataIndex: "firstName",
       width: 150,
       render: (val, record) =>
-        `${record.firstName || '--'} ${record.lastName || ''}`,
+        `${record.firstName || "--"} ${record.lastName || ""}`,
     },
     {
-      title: 'Email',
-      dataIndex: 'emailId',
+      title: "Email",
+      dataIndex: "emailId",
       width: 200,
-      render: (val) => val || '--',
+      render: (val) => val || "--",
     },
     {
-      title: 'Phone Number',
-      dataIndex: 'phoneNumber',
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
       width: 140,
-      render: (val) => val || '--',
+      render: (val) => val || "--",
     },
     {
-      title: 'Address',
-      dataIndex: 'customerAddress',
+      title: "Address",
+      dataIndex: "customerAddress",
       width: 200,
-      render: (val) => (val ? getAddressString(val) : '--'),
+      render: (val) => (val ? getAddressString(val) : "--"),
     },
     {
-      title: 'Date of Birth',
-      dataIndex: 'dob',
+      title: "Date of Birth",
+      dataIndex: "dob",
       width: 120,
-      render: (val) => val || '--',
+      render: (val) => val || "--",
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
+      title: "Gender",
+      dataIndex: "gender",
       width: 90,
-      render: (val) => val || '--',
+      render: (val) => val || "--",
     },
     {
-      title: 'Family Members',
-      dataIndex: 'familyMembers',
+      title: "Family Members",
+      dataIndex: "familyMembers",
       width: 150,
-      render: (val) => (val?.length || val?.length === 0 ? val.length : '--'),
+      render: (val) => (val?.length || val?.length === 0 ? val.length : "--"),
     },
     {
-      title: 'Signed Up On',
-      dataIndex: 'createdAt',
+      title: "Status",
+      dataIndex: "status",
+      width: 100,
+      render: (val) => val || "--",
+    },
+    {
+      title: "Signed Up On",
+      dataIndex: "createdAt",
       width: 200,
       render: (val, record) =>
         record.createdAtStr || val
-          ? moment(new Date(val)).format('DD MMM, YYYY hh:mm A')
-          : '--',
+          ? moment(new Date(val)).format("DD MMM, YYYY hh:mm A")
+          : "--",
     },
     {
-      title: 'Actions',
-      dataIndex: 'actions',
+      title: "Actions",
+      dataIndex: "actions",
       width: 80,
-      fixed: 'right',
+      fixed: "right",
       render: (val: any, record: ICustomer) => (
         <Dropdown
           menu={{
             items: [
               {
-                key: 'view-details',
+                key: "view-details",
                 label: <div id="options-view-details">View Details</div>,
                 onClick: () =>
                   router.push(`${router.pathname}/${record.customerId}`),
@@ -121,7 +127,7 @@ const CustomerssPage = () => {
         >
           <Image
             src={MenuIcon}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
             layout="fixed"
             id="options-wrapper"
           />
@@ -132,6 +138,21 @@ const CustomerssPage = () => {
 
   return (
     <Container>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: 10,
+        }}
+      >
+        <Button
+          type="primary"
+          onClick={() => router.push(`${router.pathname}/new`)}
+        >
+          Add New Customer
+        </Button>
+      </div>
+
       <div ref={wrapperRef} className="bg-white border border-gray-300">
         <Table
           rowKey={(row) => row.customerId}
@@ -142,6 +163,14 @@ const CustomerssPage = () => {
             x: wrapperRef.current?.clientWidth,
             y: `calc(100vh - 210px)`,
           }}
+          onRow={(record) => ({
+            onClick: (e: any) => {
+              if (!e.target?.id.startsWith("options-")) {
+                router.push(`${router.pathname}/${record.customerId}`);
+              }
+            },
+            style: { cursor: "pointer" },
+          })}
           pagination={{
             current: pagination.current + 1,
             pageSize: pagination.pageSize,
