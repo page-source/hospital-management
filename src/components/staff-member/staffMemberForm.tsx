@@ -749,7 +749,7 @@ const StaffMemberForm = () => {
 
               <Col sm={24} md={8}>
                 <Form.Item
-                  label="Serviceable Servicessss"
+                  label="Serviceable Services"
                   name="serviceableServices"
                   rules={[
                     {
