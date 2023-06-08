@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Button, Empty, message, Rate, Spin, Switch } from "antd";
+import { Button, Empty, Rate, Spin, Switch } from "antd";
 import Link from "next/link";
 import moment from "moment";
 
@@ -309,7 +309,7 @@ const StaffMemberDetail = () => {
           </div>
 
           <div className="flex pb-2">
-            <div className={styles["field-title"]}>Address as on Aadhasr :</div>
+            <div className={styles["field-title"]}>Address as on Aadhaar :</div>
             <div>{details?.addressAsOnAadhaar || "--"}</div>
           </div>
 
@@ -402,6 +402,20 @@ const StaffMemberDetail = () => {
                 </table>
               ) : (
                 "--"
+              )}
+            </div>
+          </div>
+
+          <div className="flex pb-4">
+            <div className={styles["field-title"]}>
+              Serviceable Service Types:
+            </div>
+            <div className={styles["table-wrapper"]}>
+              {details?.serviceableServices.map(
+                (item: unknown, index: number) =>
+                  `${item as string}${
+                    index < details?.serviceableServices.length - 1 ? "," : ""
+                  } `
               )}
             </div>
           </div>

@@ -9,7 +9,7 @@
 }
 
 .field-title {
-  width: 175px;
+  width: 200px;
   min-width: 175px;
   margin-bottom: 5px;
 }
@@ -77,5 +77,16 @@
   th,
   td {
     padding: 2px 8px;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .field-title {
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .field-title ~ div {
+    font-weight: 500;
   }
 }

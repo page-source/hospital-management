@@ -34,3 +34,42 @@
     padding: 2px 8px;
   }
 }
+
+.table-wrapper-2 table th,
+.table-wrapper-2 table td {
+  padding: 8px;
+}
+
+.photo-field-div,
+.doc-photo-field-div {
+  width: fit-content;
+  position: relative;
+
+  .photo-field {
+    width: 102px;
+    height: 102px;
+    object-fit: cover;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+  }
+
+  .photo-remove-icon {
+    position: absolute;
+    top: 0;
+    border: 1px solid;
+    padding: 4px;
+    right: 0;
+    transform: translate(50%, -50%);
+    cursor: pointer;
+    color: rgb(255, 77, 79);
+    border-radius: 50%;
+    background: white;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .field-title {
+    width: 130px;
+    min-width: 130px;
+  }
+}

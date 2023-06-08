@@ -409,7 +409,7 @@ const NewBooking = () => {
                 name="amount"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please enter amount",
                   },
                   () => ({
@@ -436,7 +436,7 @@ const NewBooking = () => {
                 name="transactionId"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please enter Transaction ID",
                   },
                 ]}
@@ -450,12 +450,15 @@ const NewBooking = () => {
                 name="paymentChannel"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please enter Payment Channel",
                   },
                 ]}
               >
-                <Input placeholder="Enter Payment Channel" />
+                <Select
+                  placeholder="Select Payment Channel"
+                  options={[{ label: "Razorpay", value: "RAZOR_PAY" }]}
+                />
               </Form.Item>
             </Col>
           </Row>

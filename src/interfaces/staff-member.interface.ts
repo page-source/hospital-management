@@ -26,6 +26,7 @@ export interface IStaffMember {
   letterStartDate: string;
   letterEndDate: string;
   serviceableZipCodes: string[];
+  serviceableServices: string[];
   emergencyContactNumber: string;
   addressAsOnAadhaar: string;
   nameAsPerBank: string;

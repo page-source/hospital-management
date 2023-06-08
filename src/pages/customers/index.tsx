@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Dropdown, Table } from "antd";
+import { Dropdown, Table, Button } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ColumnsType } from "antd/lib/table";
@@ -93,6 +93,12 @@ const CustomerssPage = () => {
       render: (val) => (val?.length || val?.length === 0 ? val.length : "--"),
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      width: 100,
+      render: (val) => val || "--",
+    },
+    {
       title: "Signed Up On",
       dataIndex: "createdAt",
       width: 200,
@@ -132,6 +138,21 @@ const CustomerssPage = () => {
 
   return (
     <Container>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: 10,
+        }}
+      >
+        <Button
+          type="primary"
+          onClick={() => router.push(`${router.pathname}/new`)}
+        >
+          Add New Customer
+        </Button>
+      </div>
+
       <div ref={wrapperRef} className="bg-white border border-gray-300">
         <Table
           rowKey={(row) => row.customerId}
@@ -142,6 +163,14 @@ const CustomerssPage = () => {
             x: wrapperRef.current?.clientWidth,
             y: `calc(100vh - 210px)`,
           }}
+          onRow={(record) => ({
+            onClick: (e: any) => {
+              if (!e.target?.id.startsWith("options-")) {
+                router.push(`${router.pathname}/${record.customerId}`);
+              }
+            },
+            style: { cursor: "pointer" },
+          })}
           pagination={{
             current: pagination.current + 1,
             pageSize: pagination.pageSize,

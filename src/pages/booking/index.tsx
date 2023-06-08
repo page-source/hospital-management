@@ -366,6 +366,14 @@ const BookingsPage = () => {
           menu={{
             items: [
               {
+                key: "edit-details",
+                label: <div id="options-edit-details">Edit Details</div>,
+                onClick: () =>
+                  router.push(
+                    `${router.pathname}/${record.bookingId}?edit=true`
+                  ),
+              },
+              {
                 key: "view-details",
                 label: <div id="options-view-details">View Details</div>,
                 onClick: () => setSelectedBooking(record),
@@ -416,7 +424,11 @@ const BookingsPage = () => {
       ),
     },
   ];
-
+  const typeOptions = [
+    { label: "All", value: "ALL" },
+    { label: "New", value: "NEW_BOOKINGS" },
+    { label: "Approved", value: "APPROVED" },
+  ];
   return (
     <Container
       extraContent={
@@ -434,20 +446,26 @@ const BookingsPage = () => {
           gap: 15,
           marginBottom: 10,
         }}
+        className={styles["booking-menu"]}
       >
         <div className="flex items-center gap-2">
           <div>Type:</div>
-          <Radio.Group
-            options={[
-              { label: "All", value: "ALL" },
-              { label: "New", value: "NEW_BOOKINGS" },
-              { label: "Approved", value: "APPROVED" },
-            ]}
-            onChange={({ target }) => setTypeFilter(target.value)}
-            value={typeFilter}
-            optionType="button"
-            buttonStyle="solid"
-          />
+          {window.innerWidth > 560 ? (
+            <Radio.Group
+              options={typeOptions}
+              onChange={({ target }) => setTypeFilter(target.value)}
+              value={typeFilter}
+              optionType="button"
+              buttonStyle="solid"
+            />
+          ) : (
+            <Select
+              defaultValue={typeFilter}
+              style={{ width: 100 }}
+              onChange={setTypeFilter}
+              options={typeOptions}
+            />
+          )}
         </div>
 
         <div className="flex gap-3">
@@ -455,7 +473,7 @@ const BookingsPage = () => {
             type="primary"
             onClick={() => router.push(`${router.pathname}/new`)}
           >
-            Add New Booking
+            {window.innerWidth > 560 ? "Add New Booking" : "+ Booking"}
           </Button>
 
           <Tooltip title="Refresh">
