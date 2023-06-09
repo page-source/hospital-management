@@ -81,7 +81,7 @@ const StaffMemberForm = () => {
               ? moment(obj.letterStartDate, "YYYY-MM-DD")
               : undefined;
             obj.letterEndDate = obj.letterEndDate
-              ? moment(obj.letterEndDate, "YYYY-MM-DD")
+              ? moment(obj.letterEndDate, "DD-MMM-YYYY")
               : undefined;
             obj.language = obj.language ? obj.language.split(", ") : [];
             setDetails(obj);

@@ -411,12 +411,16 @@ const StaffMemberDetail = () => {
               Serviceable Service Types:
             </div>
             <div className={styles["table-wrapper"]}>
-              {details?.serviceableServices.map(
-                (item: unknown, index: number) =>
-                  `${item as string}${
-                    index < details?.serviceableServices.length - 1 ? "," : ""
-                  } `
-              )}
+              {details?.serviceableServices
+                ? details?.serviceableServices.map(
+                    (item: unknown, index: number) =>
+                      `${item as string}${
+                        index < details?.serviceableServices.length - 1
+                          ? ","
+                          : ""
+                      } `
+                  )
+                : "--"}
             </div>
           </div>
 
