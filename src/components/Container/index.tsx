@@ -80,6 +80,8 @@ const Container: FC<Data> = ({ children, extraContent }) => {
     window.location.pathname = "/";
   };
 
+  const mobileDevice = window.innerWidth < 560;
+
   const onCollapse = () => {
     localStorage.setItem("isCollapsed", JSON.stringify(!collapsed));
     setCollapsed(!collapsed);
@@ -185,7 +187,7 @@ const Container: FC<Data> = ({ children, extraContent }) => {
           {extraContent}
         </div>
         <div
-          className="p-6"
+          className={mobileDevice ? "p-3" : "p-6"}
           style={{ height: "calc(100vh - 48px)", overflow: "auto" }}
         >
           {children}

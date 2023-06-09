@@ -429,6 +429,7 @@ const BookingsPage = () => {
     { label: "New", value: "NEW_BOOKINGS" },
     { label: "Approved", value: "APPROVED" },
   ];
+  const mobileDevice = window.innerWidth < 560;
   return (
     <Container
       extraContent={
@@ -449,21 +450,21 @@ const BookingsPage = () => {
         className={styles["booking-menu"]}
       >
         <div className="flex items-center gap-2">
-          <div>Type:</div>
-          {window.innerWidth > 560 ? (
+          {!mobileDevice && <div>Type:</div>}
+          {mobileDevice ? (
+            <Select
+              defaultValue={typeFilter}
+              style={{ width: 105 }}
+              onChange={setTypeFilter}
+              options={typeOptions}
+            />
+          ) : (
             <Radio.Group
               options={typeOptions}
               onChange={({ target }) => setTypeFilter(target.value)}
               value={typeFilter}
               optionType="button"
               buttonStyle="solid"
-            />
-          ) : (
-            <Select
-              defaultValue={typeFilter}
-              style={{ width: 100 }}
-              onChange={setTypeFilter}
-              options={typeOptions}
             />
           )}
         </div>
