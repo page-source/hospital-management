@@ -62,13 +62,13 @@ const StaffMemberList = () => {
       .catch(console.log)
       .finally(() => setDeletingStaffId(""));
   };
-
+  const mobileDevice = window.innerWidth < 560;
   const columns: ColumnsType<IStaffMember> = [
     {
       title: "Staff ID",
       dataIndex: "staffId",
-      width: 150,
-      fixed: "left",
+      ...(mobileDevice ? { width: 100 } : { width: 150 }),
+      ...(!mobileDevice && { fixed: "left" }),
       render: (val) =>
         val ? (
           <Link href={`/staff-list/${val}`}>
@@ -138,7 +138,7 @@ const StaffMemberList = () => {
       title: "Actions",
       dataIndex: "actions",
       fixed: "right",
-      width: 100,
+      ...(mobileDevice ? { width: 75 } : { width: 100 }),
       render: (val, record) => (
         <Dropdown
           menu={{
