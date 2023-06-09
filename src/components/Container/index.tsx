@@ -67,8 +67,10 @@ const Container: FC<Data> = ({ children, extraContent }) => {
   const router = useRouter();
   const appStore = useAppStore();
   const [user] = useUserContext();
+  const mobileDevice = window.innerWidth < 560;
   const [collapsed, setCollapsed] = useState(
-    () => !!JSON.parse(localStorage.getItem("isCollapsed") || "false")
+    () =>
+      mobileDevice || localStorage.getItem("isCollapsed") === "true" || false
   );
 
   const userName = user?.firstName
@@ -79,8 +81,6 @@ const Container: FC<Data> = ({ children, extraContent }) => {
     window.localStorage.clear();
     window.location.pathname = "/";
   };
-
-  const mobileDevice = window.innerWidth < 560;
 
   const onCollapse = () => {
     localStorage.setItem("isCollapsed", JSON.stringify(!collapsed));
