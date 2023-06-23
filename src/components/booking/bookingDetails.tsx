@@ -1,20 +1,21 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { Button, Dropdown, Form, message, Modal, Select, Spin } from 'antd';
-import { ArrowLeftOutlined, LinkOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Button, Dropdown, Form, message, Modal, Select, Spin } from "antd";
+import { ArrowLeftOutlined, LinkOutlined } from "@ant-design/icons";
+import moment from "moment";
+import { getBase64FromURL } from "commonFunctions/upload-helper";
 
-import MenuIcon from 'assets/menu.svg';
-import api from 'components/axios';
-import { IBooking } from 'interfaces/booking.interface';
-import { IStaffMember } from 'interfaces/staff-member.interface';
+import MenuIcon from "assets/menu.svg";
+import api from "components/axios";
+import { IBooking } from "interfaces/booking.interface";
+import { IStaffMember } from "interfaces/staff-member.interface";
 
-import styles from './styles/bookingDetail.module.scss';
+import styles from "./styles/bookingDetail.module.scss";
 
 interface IStatusChangeState {
-  type: 'cancelled' | 'completed';
+  type: "cancelled" | "completed";
   loading: boolean;
 }
 
@@ -27,7 +28,7 @@ const BookingDetails = () => {
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState<IBooking>();
   const [approvingStaffMemberId, setApprovingStaffMemberId] =
-    useState<string>('');
+    useState<string>("");
   const [staffMembers, setStaffMembers] = useState<IStaffMember[]>();
 
   const [isAssigneeModalOpen, setIsAssigneeModalOpen] = useState(false);
@@ -37,13 +38,19 @@ const BookingDetails = () => {
   const loadDetails = () => {
     api
       .get(`/pht/v1/api/bookings/${bookingId}`)
-      .then((r) => {
-        if (r.data.status !== 'FAILURE') {
-          setDetails({ ...r.data.data });
+      .then(async (r) => {
+        if (r.data.status !== "FAILURE") {
+          const obj = r.data?.data || {};
+          if (obj.prescriptionFilePaths) {
+            obj.prescriptionBase64 = await getBase64FromURL(
+              obj.prescriptionFilePaths[0]
+            );
+          }
+          setDetails(obj);
         } else {
           message.error({
-            content: r.data?.data || 'Unable to fetch!',
-            key: 'booking',
+            content: r.data?.data || "Unable to fetch!",
+            key: "booking",
             duration: 4,
           });
         }
@@ -54,7 +61,7 @@ const BookingDetails = () => {
 
   useEffect(() => {
     api
-      .get('/pht/v1/api/staff/')
+      .get("/pht/v1/api/staff/")
       .then((r) => setStaffMembers(r.data?.data?.staffList || []))
       .catch(console.log);
   }, []);
@@ -77,48 +84,48 @@ const BookingDetails = () => {
   function approveBooking(staffId: string) {
     setApprovingStaffMemberId(staffId);
     api
-      .get('/pht/v1/api/bookings/action/approve-invitation', {
+      .get("/pht/v1/api/bookings/action/approve-invitation", {
         params: { booking_id: bookingId, care_giver_id: staffId },
       })
       .then((r) => {
-        if (r.data?.status !== 'FAILURE') {
+        if (r.data?.status !== "FAILURE") {
           message.success({
-            content: 'Updated successfully!',
-            key: 'booking',
+            content: "Updated successfully!",
+            key: "booking",
             duration: 4,
           });
           loadDetails();
         } else {
           message.error({
-            content: r.data.data || 'Unable to update!',
-            key: 'booking',
+            content: r.data.data || "Unable to update!",
+            key: "booking",
             duration: 4,
           });
         }
       })
       .catch(console.log)
-      .finally(() => setApprovingStaffMemberId(''));
+      .finally(() => setApprovingStaffMemberId(""));
   }
 
   const markAsCompleted = () => {
     setChangingStatus({
       loading: true,
-      type: 'completed',
+      type: "completed",
     });
     api
       .get(`/pht/v1/api/bookings/action/mark-complete?booking_id=${bookingId}`)
       .then((r) => {
-        if (r.data?.status !== 'FAILURE') {
+        if (r.data?.status !== "FAILURE") {
           loadDetails();
           message.success({
-            content: 'Marked as Completed successfully!',
-            key: 'bookings',
+            content: "Marked as Completed successfully!",
+            key: "bookings",
             duration: 4,
           });
         } else {
           message.error({
-            content: r.data.data || 'Failed in marking as completed!',
-            key: 'bookings',
+            content: r.data.data || "Failed in marking as completed!",
+            key: "bookings",
             duration: 4,
           });
         }
@@ -130,22 +137,22 @@ const BookingDetails = () => {
   const markAsCancelled = () => {
     setChangingStatus({
       loading: true,
-      type: 'cancelled',
+      type: "cancelled",
     });
     api
       .get(`/pht/v1/api/bookings/action/mark-cancel?booking_id=${bookingId}`)
       .then((r) => {
         loadDetails();
-        if (r.data?.status !== 'FAILURE') {
+        if (r.data?.status !== "FAILURE") {
           message.success({
-            content: 'Marked as cancelled successfully!',
-            key: 'bookings',
+            content: "Marked as cancelled successfully!",
+            key: "bookings",
             duration: 4,
           });
         } else {
           message.error({
-            content: r.data.data || 'Failed in marking as cancelled!',
-            key: 'bookings',
+            content: r.data.data || "Failed in marking as cancelled!",
+            key: "bookings",
             duration: 4,
           });
         }
@@ -162,19 +169,19 @@ const BookingDetails = () => {
         staffId: values.staffId,
       })
       .then((r) => {
-        if (r.data?.status !== 'FAILURE') {
+        if (r.data?.status !== "FAILURE") {
           loadDetails();
           message.success({
-            content: 'Booking assigned successfully!',
-            key: 'bookings',
+            content: "Booking assigned successfully!",
+            key: "bookings",
             duration: 4,
           });
           form.resetFields();
           setIsAssigneeModalOpen(false);
         } else {
           message.error({
-            content: r.data.data || 'Failed in assigning booking!',
-            key: 'bookings',
+            content: r.data.data || "Failed in assigning booking!",
+            key: "bookings",
             duration: 4,
           });
         }
@@ -209,25 +216,25 @@ const BookingDetails = () => {
               items: details
                 ? [
                     {
-                      key: 'assign',
+                      key: "assign",
                       label: <div>Assign Staff Member</div>,
                       onClick: () => setIsAssigneeModalOpen(true),
                     },
                     {
-                      key: 'complete',
+                      key: "complete",
                       label: <div>Mark As Completed</div>,
                       onClick: () =>
                         setChangingStatus({
-                          type: 'completed',
+                          type: "completed",
                           loading: false,
                         }),
                     },
                     {
-                      key: 'cancel',
+                      key: "cancel",
                       label: <div>Mark As Cancelled</div>,
                       onClick: () =>
                         setChangingStatus({
-                          type: 'cancelled',
+                          type: "cancelled",
                           loading: false,
                         }),
                     },
@@ -237,7 +244,7 @@ const BookingDetails = () => {
           >
             <Image
               src={MenuIcon}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
               layout="fixed"
               id="options-wrapper"
             />
@@ -245,7 +252,7 @@ const BookingDetails = () => {
         </div>
       </div>
 
-      <h2 className={styles['main-title']}>Booking Detail</h2>
+      <h2 className={styles["main-title"]}>Booking Detail</h2>
 
       {loading ? (
         <div className="text-center">
@@ -254,107 +261,107 @@ const BookingDetails = () => {
       ) : (
         <>
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Booking ID :</div>
+            <div className={styles["field-title"]}>Booking ID :</div>
             <div>{bookingId}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>FieldEZ ID :</div>
-            <div>{details?.fieldEZTicketNumber || '--'}</div>
+            <div className={styles["field-title"]}>FieldEZ ID :</div>
+            <div>{details?.fieldEZTicketNumber || "--"}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Booking Date :</div>
-            <div>{details?.createdAtStr || '--'}</div>
+            <div className={styles["field-title"]}>Booking Date :</div>
+            <div>{details?.createdAtStr || "--"}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Slot Date :</div>
+            <div className={styles["field-title"]}>Slot Date :</div>
             <div>
               {details?.slotDate ? (
                 <>
-                  {moment(details.slotDate, 'YYYY-MM-DD').format(
-                    'DD MMM, YYYY'
-                  )}{' '}
-                  {moment(details.slotTime, 'HH:mm').format('hh:mm A')}
+                  {moment(details.slotDate, "YYYY-MM-DD").format(
+                    "DD MMM, YYYY"
+                  )}{" "}
+                  {moment(details.slotTime, "HH:mm").format("hh:mm A")}
                 </>
               ) : (
-                '--'
+                "--"
               )}
             </div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Customer Name :</div>
+            <div className={styles["field-title"]}>Customer Name :</div>
             <div>
-              {details?.customerName || '--'} (
-              {details?.customerEmailId || '--'})
+              {details?.customerName || "--"} (
+              {details?.customerEmailId || "--"})
             </div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Patient :</div>
+            <div className={styles["field-title"]}>Patient :</div>
             <div>
               {details?.bookingForMember ? (
                 <>
-                  {details.bookingForMember.firstName || ''}{' '}
-                  {details.bookingForMember.lastName || ''} (
-                  {details?.bookingForMember.relation || '--'})
+                  {details.bookingForMember.firstName || ""}{" "}
+                  {details.bookingForMember.lastName || ""} (
+                  {details?.bookingForMember.relation || "--"})
                 </>
               ) : (
-                '--'
+                "--"
               )}
             </div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Patient Phone :</div>
-            <div>{details?.bookingForMember?.phoneNumber || '--'}</div>
+            <div className={styles["field-title"]}>Patient Phone :</div>
+            <div>{details?.bookingForMember?.phoneNumber || "--"}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Patient Gender :</div>
-            <div>{details?.bookingForMember?.gender || '--'}</div>
+            <div className={styles["field-title"]}>Patient Gender :</div>
+            <div>{details?.bookingForMember?.gender || "--"}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Patient DOB :</div>
-            <div>{details?.bookingForMember?.dob || '--'}</div>
+            <div className={styles["field-title"]}>Patient DOB :</div>
+            <div>{details?.bookingForMember?.dob || "--"}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Staff Member :</div>
+            <div className={styles["field-title"]}>Staff Member :</div>
             <div>
               {details?.bookingAssigneeDetails ? (
                 <>
-                  {details.bookingAssigneeDetails.name || '--'} (
-                  {details.bookingAssigneeDetails.emailId || '--'})
+                  {details.bookingAssigneeDetails.name || "--"} (
+                  {details.bookingAssigneeDetails.emailId || "--"})
                 </>
               ) : (
-                '--'
+                "--"
               )}
             </div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Service Name :</div>
-            <div>{details?.serviceName || '--'}</div>
+            <div className={styles["field-title"]}>Service Name :</div>
+            <div>{details?.serviceName || "--"}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>Booking Status :</div>
-            <div>{details?.bookingStatusStr || '--'}</div>
+            <div className={styles["field-title"]}>Booking Status :</div>
+            <div>{details?.bookingStatusStr || "--"}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>
+            <div className={styles["field-title"]}>
               Total Invitations Sent :
             </div>
             <div>{details?.totalInvitationsSent || 0}</div>
           </div>
 
           <div className="flex pb-2">
-            <div className={styles['field-title']}>
+            <div className={styles["field-title"]}>
               Total Invitations Accepted :
             </div>
             <div>{details?.totalInvitationsAccepted || 0}</div>
@@ -362,11 +369,11 @@ const BookingDetails = () => {
 
           <div
             className={`flex ${
-              details?.questionAnswerList?.length ? 'pb-4 pt-4' : 'pb-2'
+              details?.questionAnswerList?.length ? "pb-4 pt-4" : "pb-2"
             }`}
           >
-            <div className={styles['field-title']}>Question Answers :</div>
-            <div className={styles['table-wrapper']}>
+            <div className={styles["field-title"]}>Question Answers :</div>
+            <div className={styles["table-wrapper"]}>
               {details?.questionAnswerList?.length ? (
                 <table>
                   <thead>
@@ -378,21 +385,21 @@ const BookingDetails = () => {
                   <tbody>
                     {details.questionAnswerList.map((el) => (
                       <tr key={el.questionId}>
-                        <td>{el.questionContent || '--'}</td>
-                        <td>{el.answer || '--'}</td>
+                        <td>{el.questionContent || "--"}</td>
+                        <td>{el.answer || "--"}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               ) : (
-                '--'
+                "--"
               )}
             </div>
           </div>
 
-          <div className={`flex ${details?.payment ? 'pb-4 pt-4' : 'pb-2'}`}>
-            <div className={styles['field-title']}>Payment Details :</div>
-            <div className={styles['table-wrapper']}>
+          <div className={`flex ${details?.payment ? "pb-4 pt-4" : "pb-2"}`}>
+            <div className={styles["field-title"]}>Payment Details :</div>
+            <div className={styles["table-wrapper"]}>
               {details?.payment ? (
                 <table>
                   <thead>
@@ -406,33 +413,33 @@ const BookingDetails = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{details.payment.paymentId || '--'}</td>
-                      <td>{details.payment.transactionId || '--'}</td>
-                      <td>{details.payment.paymentStatus || '--'}</td>
-                      <td>{details.payment.paymentChannel || '--'}</td>
+                      <td>{details.payment.paymentId || "--"}</td>
+                      <td>{details.payment.transactionId || "--"}</td>
+                      <td>{details.payment.paymentStatus || "--"}</td>
+                      <td>{details.payment.paymentChannel || "--"}</td>
                       <td>
                         {details.payment.amount
                           ? `₹ ${details.payment.amount}`
-                          : '--'}
+                          : "--"}
                       </td>
                     </tr>
                   </tbody>
                 </table>
               ) : (
-                '--'
+                "--"
               )}
             </div>
           </div>
 
           <div
             className={`flex ${
-              details?.bookingInvitations?.length ? 'pb-4 pt-4' : 'pb-2'
+              details?.bookingInvitations?.length ? "pb-4 pt-4" : "pb-2"
             }`}
           >
-            <div className={styles['field-title']}>Booking Invitations :</div>
-            <div className={styles['table-wrapper']}>
+            <div className={styles["field-title"]}>Booking Invitations :</div>
+            <div className={styles["table-wrapper"]}>
               {details?.bookingInvitations?.length === 0 ? (
-                '--'
+                "--"
               ) : (
                 <table>
                   <thead>
@@ -447,13 +454,13 @@ const BookingDetails = () => {
                   <tbody>
                     {details?.bookingInvitations.map((el) => (
                       <tr key={el.staffId}>
-                        <td>{el.staffName || '--'}</td>
-                        <td>{el.staffEmail || '--'}</td>
-                        <td>{el.staffMobileNumber || '--'}</td>
+                        <td>{el.staffName || "--"}</td>
+                        <td>{el.staffEmail || "--"}</td>
+                        <td>{el.staffMobileNumber || "--"}</td>
                         <td>{el.bookingInvitationStatus}</td>
                         <td>
-                          {el.bookingInvitationStatus === 'ACCEPTED' &&
-                          details.bookingStatus === 'ASSIGNED' ? (
+                          {el.bookingInvitationStatus === "ACCEPTED" &&
+                          details.bookingStatus === "ASSIGNED" ? (
                             <Button
                               type="primary"
                               onClick={() => approveBooking(el.staffId)}
@@ -472,6 +479,20 @@ const BookingDetails = () => {
                 </table>
               )}
             </div>
+          </div>
+
+          <div className="flex pb-2">
+            <div className={styles["field-title"]}>Prescription :</div>
+
+            {details?.prescriptionFilePaths?.length && (
+              <div>
+                <img
+                  src={details.prescriptionBase64}
+                  className={styles["photo"]}
+                  alt="Prescription Photo"
+                />
+              </div>
+            )}
           </div>
         </>
       )}
@@ -496,7 +517,7 @@ const BookingDetails = () => {
           <Form.Item
             label="Staff Member"
             name="staffId"
-            rules={[{ required: true, message: 'Staff Member is required!' }]}
+            rules={[{ required: true, message: "Staff Member is required!" }]}
           >
             <Select
               showSearch
@@ -515,16 +536,16 @@ const BookingDetails = () => {
         title="Change Status"
         open={!!changingStatus}
         onOk={() => {
-          if (changingStatus?.type === 'cancelled') {
+          if (changingStatus?.type === "cancelled") {
             markAsCancelled();
-          } else if (changingStatus?.type === 'completed') {
+          } else if (changingStatus?.type === "completed") {
             markAsCompleted();
           }
         }}
         okButtonProps={{ loading: changingStatus?.loading }}
         onCancel={() => setChangingStatus(undefined)}
       >
-        Are you sure to mark this booking ({details?.bookingId}) as{' '}
+        Are you sure to mark this booking ({details?.bookingId}) as{" "}
         {changingStatus?.type}?
       </Modal>
     </>

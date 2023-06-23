@@ -1,4 +1,4 @@
-import { IFamilyMember } from './customer.interface';
+import { IFamilyMember } from "./customer.interface";
 
 interface IBookingAssignee {
   staffId: number;
@@ -25,6 +25,8 @@ export interface IBooking {
   serviceId: string;
   bookingAssigneeDetails: IBookingAssignee;
   payment: IBookingPayment;
+  prescriptionBase64: string;
+  prescriptionFilePaths: string[];
   updatedAtStr: string;
   createdAtStr: string;
   bookingStatus: string;
@@ -40,7 +42,7 @@ export interface IBooking {
 
 interface IQuestionAnswer {
   questionId: string;
-  questionType: 'FREE_TEXT' | 'SINGLE_CHOICE';
+  questionType: "FREE_TEXT" | "SINGLE_CHOICE";
   questionContent: string;
   answer: string;
   // possibleAnswers:

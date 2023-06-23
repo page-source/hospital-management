@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
 import {
   Button,
@@ -13,20 +14,31 @@ import {
   Input,
   Radio,
   Checkbox,
+  Spin,
+  Upload,
 } from "antd";
 
 import api from "components/axios";
+import { getBase64FromURL } from "commonFunctions/upload-helper";
+
 import { IService, IServiceQuestions } from "interfaces/service.interface";
 import { ICustomer, IFamilyMember } from "interfaces/customer.interface";
 
 import styles from "./styles/bookingDetail.module.scss";
+const getRandomString = () => Math.random().toString();
 
 const NewBooking = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const selectedCustomerId = Form.useWatch("customerId", form);
   const selectedServiceId = Form.useWatch("serviceId", form);
-
+  const prescriptionValue = Form.useWatch("prescription", form);
+  const prescriptionPhotoBase64Value = Form.useWatch(
+    "prescriptionPictureBase64",
+    form
+  );
+  const [uploading, setUploading] = useState(false);
+  const [uploadFieldKey, setUploadFieldKey] = useState(getRandomString());
   const [customersLoading, setCustomersLoading] = useState(false);
   const [customersList, setCustomersList] = useState<ICustomer[]>();
   const [servicesLoading, setServicesLoading] = useState(false);
@@ -34,6 +46,45 @@ const NewBooking = () => {
   const [submitting, setSubmitting] = useState(false);
   const [membersList, setMemberList] = useState<IFamilyMember[]>([]);
   const [selectedService, setSelectedService] = useState<IService>();
+
+  const onPrescriptionPhotoUpload = (file: any) => {
+    if (!file.type.startsWith("image/")) {
+      message.error({
+        content: "Please select valid file!",
+        key: "uploadfiles",
+        duration: 4,
+      });
+      setUploadFieldKey(getRandomString());
+      return false;
+    } else if (file.size >= 20000000) {
+      message.error({
+        content: "File too large! Please select a file under 20MB.",
+        key: "uploadfiles",
+        duration: 4,
+      });
+      setUploadFieldKey(getRandomString());
+      return false;
+    } else {
+      const formData = new FormData();
+      formData.append("file", file);
+      setUploading(true);
+      api
+        .post("/pht/v1/api/file/action/upload", formData)
+        .then(async (resp) => {
+          const url = resp.data?.data;
+          const base64URL = url ? await getBase64FromURL(url) : undefined;
+          form.setFieldValue("prescription", url);
+          form.setFieldValue("prescriptionPictureBase64", base64URL);
+        })
+        .finally(() => setUploading(false));
+    }
+  };
+
+  useEffect(() => {
+    if (prescriptionValue && typeof prescriptionValue !== "string") {
+      form.setFieldValue("prescription", undefined);
+    }
+  }, [prescriptionValue]);
 
   useEffect(() => {
     form.setFieldValue("bookingForMemberId", undefined);
@@ -89,6 +140,7 @@ const NewBooking = () => {
         customerId: values.customerId,
         bookingForMemberId: values.bookingForMemberId,
         serviceId: values.serviceId,
+        prescriptionFilePaths: [values.prescription],
         slotDate: values.slotDate.format("YYYY-MM-DD"),
         slotTime: values.slotTime.format("hh:mm A"),
         workflowName: values.workflowName,
@@ -464,6 +516,46 @@ const NewBooking = () => {
           </Row>
         </>
 
+        <Row gutter={24}>
+          <Col sm={24} md={8}>
+            <Form.Item name="prescriptionPictureBase64" hidden />
+            <Form.Item label="Upload Prescription" name="prescription">
+              {prescriptionPhotoBase64Value ? (
+                <div className={styles["photo-field-div"]}>
+                  <img
+                    src={prescriptionPhotoBase64Value}
+                    className={styles["photo-field"]}
+                  />
+                  <DeleteOutlined
+                    className={styles["photo-remove-icon"]}
+                    onClick={() => {
+                      form.setFieldValue("prescription", undefined);
+                      form.setFieldValue(
+                        "prescriptionPictureBase64",
+                        undefined
+                      );
+                    }}
+                  />
+                </div>
+              ) : uploading ? (
+                <Spin size="small" />
+              ) : (
+                <Upload
+                  listType="picture-card"
+                  accept="image/*"
+                  action=""
+                  key={uploadFieldKey}
+                  beforeUpload={onPrescriptionPhotoUpload}
+                >
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Upload</div>
+                  </div>
+                </Upload>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
         <Button type="primary" htmlType="submit" loading={submitting}>
           Create
         </Button>
