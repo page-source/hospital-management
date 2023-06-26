@@ -192,6 +192,22 @@ const BookingDetails = () => {
       });
   };
 
+  function imageOpen(event: any) {
+    event.preventDefault;
+    const widthWindow = window?.visualViewport?.width || 768;
+
+    const src = event.target.src;
+    var newTab = window.open();
+    const ifMobile = window.innerWidth < 540;
+    setTimeout(function () {
+      if (newTab)
+        newTab.document.body.innerHTML = `<img src=${src} alt="Prescription Photo" style='width:${
+          ifMobile ? widthWindow : widthWindow / 2
+        }'/>`;
+    }, 5);
+
+    return false;
+  }
   return (
     <>
       <div className="flex justify-between mb-4">
@@ -484,14 +500,16 @@ const BookingDetails = () => {
           <div className="flex pb-2">
             <div className={styles["field-title"]}>Prescription :</div>
 
-            {details?.prescriptionFilePaths?.length && (
-              <div>
+            {details?.prescriptionFilePaths?.length ? (
+              <a href="#" onClick={(event) => imageOpen(event)}>
                 <img
                   src={details.prescriptionBase64}
                   className={styles["photo"]}
                   alt="Prescription Photo"
                 />
-              </div>
+              </a>
+            ) : (
+              "--"
             )}
           </div>
         </>
