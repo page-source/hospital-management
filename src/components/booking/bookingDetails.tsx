@@ -41,7 +41,10 @@ const BookingDetails = () => {
       .then(async (r) => {
         if (r.data.status !== "FAILURE") {
           const obj = r.data?.data || {};
-          if (obj.prescriptionFilePaths) {
+          if (
+            obj.prescriptionFilePaths.length > 0 &&
+            obj.prescriptionFilePaths[0]
+          ) {
             obj.prescriptionBase64 = await getBase64FromURL(
               obj.prescriptionFilePaths[0]
             );
@@ -500,7 +503,7 @@ const BookingDetails = () => {
           <div className="flex pb-2">
             <div className={styles["field-title"]}>Prescription :</div>
 
-            {details?.prescriptionFilePaths?.length ? (
+            {details?.prescriptionBase64 ? (
               <a href="#" onClick={(event) => imageOpen(event)}>
                 <img
                   src={details.prescriptionBase64}
