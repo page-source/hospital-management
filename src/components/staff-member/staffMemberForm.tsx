@@ -827,6 +827,35 @@ const StaffMemberForm = () => {
           </>
 
           <>
+            <legend>Login Details</legend>
+            <Row gutter={24}>
+              <Col sm={24} md={12} lg={8}>
+                <Form.Item
+                  label="Username"
+                  name="userId"
+                  rules={[{ required: true, message: "Please type username!" }]}
+                >
+                  <Input placeholder="Type Username" />
+                </Form.Item>
+              </Col>
+
+              <Col sm={24} md={12} lg={8}>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[{ required: true, message: "Please type password!" }]}
+                >
+                  <Input
+                    minLength={6}
+                    type="password"
+                    placeholder="Type Password"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </>
+
+          <>
             <legend>Address</legend>
             <Row gutter={24}>
               <Col sm={24} md={12} lg={8}>
@@ -850,7 +879,7 @@ const StaffMemberForm = () => {
 
               <Col sm={24} md={12} lg={8}>
                 <Form.Item
-                  label="Address as on Aadhasr"
+                  label="Address as on Aadhaar"
                   name="addressAsOnAadhaar"
                   rules={[
                     {
@@ -861,7 +890,7 @@ const StaffMemberForm = () => {
                   ]}
                 >
                   <Input.TextArea
-                    placeholder="Type Address as on Aadhasr"
+                    placeholder="Type Address as on Aadhaar"
                     autoSize={{ minRows: 4, maxRows: 4 }}
                   />
                 </Form.Item>
@@ -964,7 +993,11 @@ const StaffMemberForm = () => {
                     },
                   ]}
                 >
-                  <Input placeholder="Type Aadhaar Number" type="number" />
+                  <Input
+                    minLength={12}
+                    maxLength={12}
+                    placeholder="Type Aadhaar Number"
+                  />
                 </Form.Item>
               </Col>
             </Row>
