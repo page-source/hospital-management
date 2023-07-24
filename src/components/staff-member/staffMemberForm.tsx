@@ -217,7 +217,7 @@ const StaffMemberForm = () => {
         creatingNew ? "Create New" : "Edit"
       } Staff Member`}</h2>
 
-      {loading ? (
+      {loading || submitting ? (
         <div className="spinner-container">
           <Spin />
         </div>
