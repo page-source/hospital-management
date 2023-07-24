@@ -46,7 +46,7 @@ const TagCategoryDetail = () => {
           message.error({
             content: r.data?.data || "Unable to fetch!",
             key: "tags-category",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -93,7 +93,7 @@ const TagCategoryDetail = () => {
             content:
               r.data.data || `Unable to ${creatingNew ? "create" : "update"}!`,
             key: "tags-category",
-            duration: 4,
+            duration: 10,
           });
         }
       })

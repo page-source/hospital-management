@@ -33,7 +33,7 @@ api.interceptors.response.use(
       message.error({
         content: "User not unauthorized!",
         key: "unauthorized",
-        duration: 4,
+        duration: 10,
       });
       localStorage.clear();
       window.location.pathname = "/login";

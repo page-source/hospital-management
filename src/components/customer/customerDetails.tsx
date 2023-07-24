@@ -28,7 +28,7 @@ const CustomerDetails = () => {
           message.error({
             content: r.data?.data || "Unable to fetch!",
             key: "customer",
-            duration: 4,
+            duration: 10,
           });
         }
       })

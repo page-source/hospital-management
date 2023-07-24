@@ -44,7 +44,7 @@ const TagsPage = () => {
           message.error({
             content: r.data.data || "Unable to delete!",
             key: "tags",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -66,8 +66,7 @@ const TagsPage = () => {
     {
       title: "Services",
       dataIndex: "serviceNames",
-      render: (val: []) =>
-        val?.map((el: any) => el.name).join(", ") || "--",
+      render: (val: []) => val?.map((el: any) => el.name).join(", ") || "--",
     },
     {
       title: "Last Updated At",

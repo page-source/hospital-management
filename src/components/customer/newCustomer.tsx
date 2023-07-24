@@ -80,7 +80,7 @@ const NewCustomer = () => {
           message.error({
             content: r.data.data || "Unable to create!",
             key: "staff-member",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -93,7 +93,7 @@ const NewCustomer = () => {
       message.error({
         content: "Please select valid file!",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;
@@ -101,7 +101,7 @@ const NewCustomer = () => {
       message.error({
         content: "File too large! Please select a file under 20MB.",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;

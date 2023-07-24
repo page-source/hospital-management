@@ -34,7 +34,7 @@ const BookingPublicPage = () => {
           message.error({
             content: r.data?.data || "Unable to fetch!",
             key: "booking",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -42,7 +42,7 @@ const BookingPublicPage = () => {
         message.error({
           content: err.response?.data?.data || "Unable to fetch!",
           key: "booking",
-          duration: 4,
+          duration: 10,
         });
       })
       .finally(() => setLoading(false));

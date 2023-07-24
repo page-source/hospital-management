@@ -28,7 +28,7 @@ const TagDetail = () => {
           message.error({
             content: r.data?.data || `Unable to fetch!`,
             key: "tags",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -72,7 +72,7 @@ const TagDetail = () => {
             content:
               r.data.data || `Unable to ${creatingNew ? "create" : "update"}!`,
             key: "tags",
-            duration: 4,
+            duration: 10,
           });
         }
       })
