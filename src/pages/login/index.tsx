@@ -45,7 +45,7 @@ const Login = () => {
           message.error({
             content: resp.data?.status || "Login failed!",
             key: "login",
-            duration: 4,
+            duration: 10,
           });
         }
       })

@@ -52,7 +52,7 @@ const NewBooking = () => {
       message.error({
         content: "Please select valid file!",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;
@@ -60,7 +60,7 @@ const NewBooking = () => {
       message.error({
         content: "File too large! Please select a file under 20MB.",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;
@@ -180,7 +180,7 @@ const NewBooking = () => {
                 message.error({
                   content: updateResp.data?.data || "Unable to add payment!",
                   key: "booking",
-                  duration: 4,
+                  duration: 10,
                 });
               }
             })
@@ -188,7 +188,7 @@ const NewBooking = () => {
               message.error({
                 content: e.response?.data?.data || "Unable to add payment!",
                 key: "booking",
-                duration: 4,
+                duration: 10,
               });
               console.log(e);
             })
@@ -200,7 +200,7 @@ const NewBooking = () => {
           message.error({
             content: createResp.data?.data || "Unable to create!",
             key: "booking",
-            duration: 4,
+            duration: 10,
           });
           setSubmitting(false);
         }

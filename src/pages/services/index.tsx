@@ -51,7 +51,7 @@ const ServicesPage = () => {
           message.error({
             content: r.data.data || "Unable to delete!",
             key: "tags",
-            duration: 4,
+            duration: 10,
           });
         }
       })

@@ -53,7 +53,7 @@ const ServiceDetail = () => {
           message.error({
             content: r.data.data || "Unable to fetch details!",
             key: "service",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -84,7 +84,7 @@ const ServiceDetail = () => {
           message.error({
             content: r.data.data || "Unable to fetch details!",
             key: "service",
-            duration: 4,
+            duration: 10,
           });
         }
       })

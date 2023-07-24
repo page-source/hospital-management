@@ -94,7 +94,7 @@ const StaffMemberForm = () => {
           message.error({
             content: r.data.data || "Unable to fetch!",
             key: "staff-member",
-            duration: 4,
+            duration: 10,
           });
           router.push("/staff-list");
         }
@@ -170,7 +170,7 @@ const StaffMemberForm = () => {
           message.error({
             content: r.data.data || "Unable to create!",
             key: "staff-member",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -183,7 +183,7 @@ const StaffMemberForm = () => {
       message.error({
         content: "Please select valid file!",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;
@@ -191,7 +191,7 @@ const StaffMemberForm = () => {
       message.error({
         content: "File too large! Please select a file under 20MB.",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;
@@ -1151,7 +1151,7 @@ const DocumentTableRow = ({ field, remove, index, form }: any) => {
       message.error({
         content: "Please select valid file!",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;
@@ -1159,7 +1159,7 @@ const DocumentTableRow = ({ field, remove, index, form }: any) => {
       message.error({
         content: "File too large! Please select a file under 20MB.",
         key: "uploadfiles",
-        duration: 4,
+        duration: 10,
       });
       setUploadFieldKey(getRandomString());
       return false;

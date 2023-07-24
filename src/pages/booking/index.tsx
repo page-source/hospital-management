@@ -176,7 +176,7 @@ const BookingsPage = () => {
           message.error({
             content: r.data.data || "Failed in marking as completed!",
             key: "bookings",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -204,7 +204,7 @@ const BookingsPage = () => {
           message.error({
             content: r.data.data || "Failed in marking as cancelled!",
             key: "bookings",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -234,7 +234,7 @@ const BookingsPage = () => {
           message.error({
             content: r.data.data || "Failed in assigning booking!",
             key: "bookings",
-            duration: 4,
+            duration: 10,
           });
         }
       })

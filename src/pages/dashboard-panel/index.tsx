@@ -53,7 +53,7 @@ const DashboardPanel = () => {
           message.error({
             content: r.data.data || "Unable to update!",
             key: "dashboard",
-            duration: 4,
+            duration: 10,
           });
         }
       })

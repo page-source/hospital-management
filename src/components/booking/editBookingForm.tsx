@@ -25,7 +25,7 @@ const EditBooking = () => {
           message.error({
             content: r.data?.data || "Unable to fetch!",
             key: "booking",
-            duration: 4,
+            duration: 10,
           });
         }
       })
@@ -65,7 +65,7 @@ const EditBooking = () => {
           message.error({
             content: createResp.data?.data || "Unable to update!",
             key: "booking",
-            duration: 4,
+            duration: 10,
           });
           setSubmitting(false);
         }
@@ -74,7 +74,7 @@ const EditBooking = () => {
         message.error({
           content: e.response?.data?.data || "Unable to update!",
           key: "booking",
-          duration: 4,
+          duration: 10,
         });
         console.log(e);
       })
